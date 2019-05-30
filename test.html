@@ -6,14 +6,48 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Document</title>
+    <style>
+        .iu {
+            margin: 10px auto;
+            width: 150px;
+            height: 20px;
+            font-size: 40px;
+        }
+        
+        .box {
+            position: relative;
+            width: 200px;
+            height: 200px;
+            background-color: white;
+            margin: 50px auto;
+        }
+        
+        .left,
+        .right {
+            position: absolute;
+            width: 100px;
+            height: 160px;
+            background-color: red;
+            border-radius: 50px 50px 0 0;
+        }
+        
+        .left {
+            transform: rotate(-45deg);
+        }
+        
+        .right {
+            transform: translateX(43px) rotate(45deg);
+        }
+    </style>
 </head>
 
 <body>
-    <div>123</div>
-    <div>只是测试</div>
-    <div>嘻嘻嘻嘻嘻嘻</div>
-    <div>ssssssssssssssss</div>
-    <div>ddddddddddd</div>
+    <div class="iu">i$u</div>
+    <div class="box">
+        <div class="left"></div>
+        <div class="right"></div>
+    </div>
+
 </body>
 
-</html>
+</html
