@@ -1,0 +1,108 @@
+// 导入 express 模块
+const express = require('express')
+// 创建 express 的服务器实例
+const app = express()
+// 1. 导入 mysql 模块
+const mysql = require('mysql')
+
+const bodyParser = require('body-parser')
+// 注册 body-parser 中间件，来解析Post提交过来的表单数据
+app.use(bodyParser.urlencoded({ extended: false }))
+
+// 2. 创建mysql的连接对象
+const conn = mysql.createConnection({
+  host: 'localhost',
+  user: 'root',
+  password: 'root',
+  database: 'mysql_001'
+})
+
+/**
+ * 获取所有英雄
+ */
+app.get('/getallhero',(req,res)=>{
+    const sql ="select * from heros"
+    conn.query(sql,(err,result)=>{
+        if(err) return res.send({status:500,msg:err.message,data:null})
+        res.send({status:200,msg:'ok',data:result})
+    })
+
+});
+/**
+ * 添加英雄
+ */
+app.post("/addhero",(req,res)=>{
+    const hero = req.body
+    // 得到当前的时间对象
+    const dt = new Date()
+
+    // 字符串，有一个新方法，叫做 padStart(长度, 要填充的字符串)
+    const y = dt.getFullYear()
+    const m = (dt.getMonth() + 1).toString().padStart(2, '0')
+    const d = dt
+      .getDate()
+      .toString()
+      .padStart(2, '0')
+
+    const hh = dt
+      .getHours()
+      .toString()
+      .padStart(2, '0')
+    const mm = dt
+      .getMinutes()
+      .toString()
+      .padStart(2, '0')
+    const ss = dt
+      .getSeconds()
+      .toString()
+      .padStart(2, '0')
+    // 补全英雄的添加时间
+    hero.ctime = y + '-' + m + '-' + d + ' ' + hh + ':' + mm + ':' + ss
+    // hero.ctime = new Date()
+
+    // 调用 conn.query 实现 添加英雄
+    const sql = 'insert into heros set ?'
+    conn.query(sql, hero, (err, result) => {
+      if (err) return res.send({ status: 500, msg: err.message, data: null })
+      res.send({ status: 200, msg: 'ok', data: null })
+    })
+})
+
+
+/**
+ * 根据id 获取英雄信息
+ */
+
+app.get('/gethero/:id', (req, res) => {
+    // console.log(req.params.id)
+    let id= req.params.id
+    const sql="select * from heros where id = ?"
+
+    conn.query(sql,id,(err,result)=>{
+        if(err) return res.send({status:500,msg:err.message,data:null})
+        res.send({status:200,msg:'ok',data:result})
+    })
+
+  })
+  
+/**
+ * 根据id 更新英雄信息
+ */
+  app.post('/updatehero',(req,res)=>{
+    // let id= req.params.id
+    let newinfo=req.body;
+    console.log(newinfo);
+    
+    const sql="UPDATE heros set ? WHERE id =? "r
+    conn.query(sql,[newinfo,newinfo.id],(err,result)=>{
+        if(err) return res.send({status:500,msg:err.message,data:null})
+        res.send({status:200,msg:'ok',data:null})
+    })
+
+  })
+
+
+
+app.listen(5001, () => {
+    console.log('server running at http://127.0.0.1:5001')
+  })
